@@ -4,14 +4,44 @@
 	{\fboxrule=4pt \fbox{\fboxrule=1pt
 		\fbox{\LARGE{\bfseries 2. Diseño del algoritmo del MI}}}} \\
 	\addcontentsline{toc}{chapter}{2. Diseño del algoritmo del Motor de Inferencias}
-	\setcounter{chapter}{1}
+	\setcounter{chapter}{2}
 	\setcounter{section}{0}
 	\rule{15cm}{0pt} \\
 \end{center}
 
 \section{Pseudocódigo}
 %%% CÓDIGO %%%
-\begin{listing}[style=consola]
+\begin{listing}[language=Pascal]
+function ENCAMINAMIENTO-HACIA-ATRAS
+  BH=HechosIniciales;
+  si Verificar(Meta,BH) entonces devolver "exito";
+  si no
+    devolver "fracaso";
+  fin si
+\end{listing}
+\begin{listing}[language=Pascal]
+function VERIFICAR
+  Verificado=Falso;
+  si Contenida(Meta,BH) entonces devolver "Verdadero";
+  si no
+    ConjuntoConflicto=Equiparar(Consecuentes(BC),Meta);
+    mientras NoVacio(ConjuntoConflicto) y No(verificado) hacer
+      R=Resolver(ConjuntoConflicto);
+	  Eliminar(R,ConjuntoCOnflicto);
+	  NuevasMetas=ExtraerAntecedentes(R);
+	  Verificado=Verdadero;
+	  mientras noVacio(NuevasMetas) y Verificado hacer
+	  	Nmet=SeleccionarMeta(NuevasMetas);
+		Eliminar(NMet, NuevasMetas);
+		Verificado=Verificar(NMet,BH);
+	  fin mientras
+	  si Verificado entonces A\~nadir(Meta,BH);
+	  fin si
+	fin mientras
+	devolver(Verificado);
+  fin si
+
+
 
 \end{listing}
 
