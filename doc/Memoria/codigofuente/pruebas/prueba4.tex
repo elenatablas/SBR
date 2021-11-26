@@ -1,7 +1,44 @@
 \section{Prueba 4}
 
 \subsection{Formalización del problema}
-
-\subsection{Base de Hechos (BH)}
+\par Sea la siguiente signatura:
+\par \texttt{$\sum$ = \{antigüedad2-3, antigüedad>3, conduce2-3, conduce>3, 
+experimentado, cansado, joven, alcohol, nosolo, causante\}}
+\par donde
+\begin{itemize}
+    \item \texttt{antigüedad2-3} = ``El conductor tiene antigüedad entre 2-3 años''
+    \item \texttt{antigüedad>3} = ``El conductor tiene antigüedad mayor de 3 años''
+    \item \texttt{conduce2-3} = ``El conductor conduce entre 2-3 horas''
+    \item \texttt{conduce>3} = ``El conductor conduce más de tres horas''
+    \item \texttt{experimentado} = ``El conductor es experimentado''
+    \item \texttt{cansado} = ``El conductor está cansado''
+    \item \texttt{joven} = ``El conductor es joven''
+    \item \texttt{alchool} = ``El conductor bebe alchool''
+    \item \texttt{nosolo} = ``El conductor no viaja solo''
+    \item \texttt{causante} = ``El conductor causante del accidente de tráfico''
+\end{itemize}
 
 \subsection{Base de Conocimiento (BC)}
+Reglas:
+\begin{itemize}
+    \item R1: Si \texttt{antigüedad2-3} Entonces \texttt{experimentado}, $FC=0.5$
+    \item R2: Si \texttt{antigüedad>3} Entonces \texttt{experimentado}, $FC=0.9$
+    \item R3: Si \texttt{conduce2-3} Entonces \texttt{cansado}, $FC=0.5$
+    \item R4: Si \texttt{conduce>3} Entonces \texttt{cansado}, $FC=1$
+    \item R5: Si \texttt{experimentado} y \texttt{nosolo} Entonces \texttt{causante}, $FC=-0.5$
+    \item R6: Si \texttt{cansado} Entonces \texttt{causante}, $FC=0.5$
+    \item R7: Si \texttt{joven} y \texttt{alchool} Entonces \texttt{causante}, $FC=0.7$ 
+\end{itemize}
+
+\subsection{Base de Hechos (BH)}
+Hechos:
+\begin{itemize}
+    \item \texttt{antigüedad2-3}, $FC(\texttt{antigüedad2-3}) = 1$
+    \item \texttt{antigüedad>3}, $FC(\texttt{antigüedad>3}) = 1$
+    \item \texttt{conduce2-3}, $FC(\texttt{conduce2-3}) = 0$
+    \item \texttt{conduce>3}, $FC(\texttt{conduce>3}) = 1$
+    \item \texttt{joven}, $FC(\texttt{joven}) = 0.4$
+    \item \texttt{alcohol}, $FC(\texttt{alcohol}) = 0.4$
+    \item \texttt{nosolo}, $FC(\texttt{nosolo}) = 0$
+\end{itemize}
+\newpage
