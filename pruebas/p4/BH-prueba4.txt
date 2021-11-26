@@ -1,0 +1,10 @@
+7
+antigüedad2-3, FC=1
+antigüedad>3, FC=0
+conduce2-3, FC=0
+conduce>3, FC=1
+joven, FC=0.4
+alcohol, FC=0.5
+nosolo, FC=0
+Objetivo
+causante
