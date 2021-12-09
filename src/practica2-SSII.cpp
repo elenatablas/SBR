@@ -1,5 +1,7 @@
 #include <iostream> // Variables cin y cout
 #include <set>
+#include <iterator>
+#include <string>
 #include <regex>
 using namespace std;
 
@@ -34,7 +36,7 @@ entradaBH()
 {
     //std::regex regexHecho ("([^,]+)");
     //std::regex regexFactor ("(\d+(\.\d+)?)$");
-    std::regex regexLinea("[^,]+)(,\s+FC\s*=\s*)(\d+(\.\d+)?$");
+    std::regex regexLinea("([^,]+)(,\\s+FC\\s*=\\s*)(\\d+(\\.\\d+))?$");
     Hecho hecho;
     std::set<Hecho> bh;
     unsigned numBH;
