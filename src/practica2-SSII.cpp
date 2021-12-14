@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#define NOM_FICHERO 1
+
 #define NUM_REGLA 3
 #define ANTECEDENTES_REGLA 4
 #define CONSECUENTE_REGLA 9
@@ -52,7 +54,7 @@ std::string entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH);
 void entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC);
 bool motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh);
 
-int 
+int
 main(int argc, char *argv[])
 {
     std::set<Regla> bc;
@@ -68,13 +70,16 @@ main(int argc, char *argv[])
         exit(0);
     }
     std::ofstream ficheroSalida;
-    ficheroSalida.open(fichBC+fichBH, ofstream::out);
+    const std::regex nom_fichero("([^\\s]*).txt");
+    std::sregex_token_iterator nom_fich(fichBC.begin(), fichBC.end(), nom_fichero, 1);
+    ficheroSalida.open(nom_fich->str()+fichBH, ofstream::out);
     ficheroSalida << "Fichero BC: " << fichBC << endl;
     ficheroSalida << "Fichero BH: " << fichBH << endl;
+    printf("2\n");
 
-    //entradaBC(bc, ficheroBC);
+    entradaBC(bc, ficheroBC);
     std::string objetivo = entradaBH(bh, ficheroBH);
-
+    printf("3\n");
     ficheroSalida << "Objetivo: " << objetivo << endl;
     ficheroSalida << "Proceso de Inferencia: " << endl;
     ficheroSalida << "Cómo se activa la red: " << endl;
@@ -82,14 +87,15 @@ main(int argc, char *argv[])
     ficheroSalida << "Hecho Objetivo con su FC: " << endl;
 
     //motorInferencias(objetivo, bc, bh);
-
+    printf("4\n");
     ficheroBC.close();
     ficheroBH.close();
     ficheroSalida.close();
+    printf("5\n");
     return 0;
 }
 
-void 
+void
 entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
 {
     const std::regex regla_regex("(R((\\d+)\\s*:\\s*Si\\s+))(\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)?)(\\s+Entonces\\s+)(\\w+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)", std::regex::icase);
@@ -97,8 +103,10 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
     const std::regex regla_conjuncion("\\w+(\\s*y\\s*\\w+)+");
     const std::regex regex_ant("\\w+");
 
+    printf("Entrada Reglas (1)\n");
+
     Regla regla;
-    unsigned numBC;
+    int numBC;
     std::string linea;
     ficheroBC >> numBC; // Número de casos
     ficheroBC.get();    // por el retorno de carrol
@@ -110,7 +118,11 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
         std::sregex_token_iterator consecuente_regla(linea.begin(), linea.end(), regla_regex, CONSECUENTE_REGLA);
         std::sregex_token_iterator factor_certeza_regla(linea.begin(), linea.end(), regla_regex, FACTOR_CERTEZA_REGLA);
 
+        cout << "------------------------------------------------------------" << endl;
+        cout << "Entrada Regla (" << i << "): " << linea << endl;
+
         regla.numRegla = stoi(num_regla->str());
+        std::cout << "Entrada Regla (numRegla):"<< regla.numRegla<< endl;
 
         std::string antecedentes = antecedentes_regla->str();
 
@@ -120,7 +132,7 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
             regla.antecedentes.insert(antecedentes);
             regla.tipo = Tipo::literal;
             regla.numAntecedentes = 1;
-            std::cout << "regla.literal " << antecedentes << "\n";
+            std::cout << "Entrada Regla (literal): " << antecedentes << endl;
         }
         else
         {
@@ -142,21 +154,23 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
                 if (match.str() != "y" && match.str() != "o")
                 {
                     regla.antecedentes.insert(match.str());
-                    std::cout << "regla.conj/dis " << match.str() << "\n";
+                    std::cout << "Entrada Regla (conj/dis): " << match.str() << endl;
                     numAntecedentes++;
                 }
             }
             regla.numAntecedentes = numAntecedentes;
+            std::cout << "Entrada Regla (numAntecedentes): " << numAntecedentes << endl;
         }
 
         regla.consecuente = consecuente_regla->str();
+        std::cout << "Entrada Regla (consecuente): " <<  regla.consecuente << endl;
         regla.facCerBC = stof(factor_certeza_regla->str());
+        std::cout << "Entrada Regla (facCerBC): " << regla.facCerBC << endl;
         if (regla.facCerBC < -1 || regla.facCerBC > 1)
         {
             cerr << "ERROR: factor de certeza incorrecto" << regla.facCerBC << endl;
             exit(0);
         }
-        std::cout << "regla.numRegla " << regla.facCerBC << "\n";
         bc.insert(regla);
     }
 }
@@ -164,47 +178,55 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
 std::string
 entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
 {
-    const std::regex hecho_linea("([^,]+)(,\\s+FC\\s*=\\s*)(\\d+(\\.\\d+))?$");
-
+    cout << "######################################################################" << endl;
+    const std::regex hecho_linea("([^,]+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)");
+    printf("Entrada Hecho (2)\n");
     Hecho hecho;
-    unsigned numBH;
+    int numBH;
     std::string linea;
     ficheroBH >> numBH; // Número de casos
+    printf("Entrada Hecho (numBH): %d\n", numBH);
     ficheroBH.get();    // por el retorno de carrol
     for (int i = 0; i < numBH && !ficheroBH.eof(); i++)
     {
         getline(ficheroBH, linea);
+        cout << "------------------------------------------------------------" << endl;
+        cout << "Entrada Hecho (" << i << "): " << linea << endl;
         std::sregex_token_iterator nombre_hecho(linea.begin(), linea.end(), hecho_linea, NOM_HECHO);
-        std::sregex_token_iterator factor_certeza_hecho(linea.begin(), linea.end(), hecho_linea, FACTOR_CERTEZA_HECHO);
         hecho.nomHecho = nombre_hecho->str();
-        hecho.facCerBH = stof(factor_certeza_hecho->str());
+        cout << "Entrada Hecho (nomHecho): " << hecho.nomHecho << endl;
+        std::sregex_token_iterator factor_certeza_hecho(linea.begin(), linea.end(), hecho_linea, FACTOR_CERTEZA_HECHO);
+        hecho.facCerBH = std::stof(factor_certeza_hecho->str());
+        cout << "Entrada Hecho (facCerBH):" << hecho.facCerBH << endl;
         if (hecho.facCerBH < -1 || hecho.facCerBH > 1)
         {
             cerr << "ERROR: factor de certeza incorrecto" << hecho.facCerBH << endl;
             exit(0);
         }
-        std::cout << "regla.numRegla " << hecho.facCerBH << "\n";
         bh.insert(hecho);
     }
+    cout << "------------------------------------------------------------" << endl;
     std::string objetivo;
     getline(ficheroBH, objetivo);
+    cout << "Entrada Hecho (objetivo1):"<< objetivo<< "\n";
     getline(ficheroBH, objetivo);
+    cout << "Entrada Hecho (objetivo2):"<< objetivo<< "\n";
     return objetivo;
 }
 /*
 //Encadenamiento hacia atrás o Dirigido por Metas
 //   Determina si se verifica una cierta meta con los hechos disponibles.
-//    La inferencia progresa en la red de derecha a izquierda 
+//    La inferencia progresa en la red de derecha a izquierda
 bool verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh);
 
-bool 
+bool
 motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh)
 {
     bool encontrado = verificar(objetivo, bc, bh);
     return encontrado;
 }
 
-bool 
+bool
 contenida(std::string objetivo, std::set<Hecho> bh)
 {
     return true;
@@ -228,7 +250,7 @@ consecuentes(std::set<Regla> bc)
     return NULL;
 }
 
-bool 
+bool
 noVacio(std::set<Regla> conjuntoVacio)
 {
     return true;
@@ -240,7 +262,7 @@ resolver(std::set<Regla> conjuntoConflicto)
     return NULL;
 }
 
-void 
+void
 eliminar(std::string r, std::set<Regla> conjuntoConflicto)
 {
 }
@@ -255,12 +277,12 @@ seleccionarMeta(std::set<Hecho> nuevasMetas)
 {
 }
 
-void 
+void
 añadir(std::string objetivo, std::set<Hecho> bh)
 {
 }
 
-bool 
+bool
 verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh ))
 {
 
