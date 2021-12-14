@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1639409718 source:c:\users\alumno\desktop\practica2\src\practica2-ssii.cpp
+	<iostream>
+	<fstream>
+	<iterator>
+	<regex>
+	<string>
+	<set>
+	<functional>
+
+1639406295 source:c:\users\alumno\desktop\practica2\src\prueba.cpp
+	<iostream>
+	<iterator>
+	<string>
+	<regex>
+	<set>
+

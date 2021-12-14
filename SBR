@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="practica2" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/practica2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename=".gitignore" />
+		<Unit filename=".vscode/c_cpp_properties copy.json" />
+		<Unit filename=".vscode/settings.json" />
+		<Unit filename=".vscode/tasks.json" />
+		<Unit filename="README.md" />
+		<Unit filename="doc/Guion-P2-(ENERO-JUNIO-JULIO)--2021-22.pdf" />
+		<Unit filename="doc/Memoria/codigofuente/algoritmo/algoritmo.tex" />
+		<Unit filename="doc/Memoria/codigofuente/conclusiones.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/ejecuciones.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/prueba2.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/prueba3.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/prueba4.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/prueba5.tex" />
+		<Unit filename="doc/Memoria/codigofuente/ejecuciones/prueba6.tex" />
+		<Unit filename="doc/Memoria/codigofuente/introduccion/introduccion.tex" />
+		<Unit filename="doc/Memoria/codigofuente/practica.tex" />
+		<Unit filename="doc/Memoria/codigofuente/pruebas/prueba4.tex" />
+		<Unit filename="doc/Memoria/codigofuente/pruebas/prueba5.tex" />
+		<Unit filename="doc/Memoria/codigofuente/pruebas/prueba6.tex" />
+		<Unit filename="doc/Memoria/codigofuente/pruebas/pruebas.tex" />
+		<Unit filename="doc/Memoria/essential/bibliografía.tex" />
+		<Unit filename="doc/Memoria/essential/portada.tex" />
+		<Unit filename="doc/Memoria/essential/preambulo.tex" />
+		<Unit filename="doc/Memoria/essential/tablaContenidos.tex" />
+		<Unit filename="doc/Memoria/practica2.tex" />
+		<Unit filename="doc/P2.1-Fundamentos-Teoricos.pdf" />
+		<Unit filename="doc/ejercicios-Resueltos--SBR-y-FCerteza.pdf" />
+		<Unit filename="pruebas/p1/BC-ejemplo1.txt" />
+		<Unit filename="pruebas/p1/BH-ejemplo1.txt" />
+		<Unit filename="pruebas/p2/BCejemplo2.txt" />
+		<Unit filename="pruebas/p2/BHejemplo2.txt" />
+		<Unit filename="pruebas/p2/Prueba-2--_enunciado-y-formalizacion_.pdf" />
+		<Unit filename="pruebas/p3/ComoAfectaEquipo.txt" />
+		<Unit filename="pruebas/p3/Prueba-3--_enunciado-y-formalizacion_.pdf" />
+		<Unit filename="pruebas/p3/Situacion-EST.txt" />
+		<Unit filename="pruebas/p3/Situacion-RM.txt" />
+		<Unit filename="pruebas/p4/BC-prueba4.txt" />
+		<Unit filename="pruebas/p4/BH-prueba4.txt" />
+		<Unit filename="pruebas/p4/Prueba-4--_enunciado_.pdf" />
+		<Unit filename="pruebas/p5/BC-prueba5.txt" />
+		<Unit filename="pruebas/p5/BH-prueba5.txt" />
+		<Unit filename="pruebas/p6/BC-prueba6.txt" />
+		<Unit filename="pruebas/p6/BH-prueba6.txt" />
+		<Unit filename="src/practica2-SSII.cpp" />
+		<Unit filename="src/prueba.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
