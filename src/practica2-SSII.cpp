@@ -8,6 +8,7 @@
 
 using namespace std;
 
+#define ERROR   -1
 #define NOM_FICHERO 1
 
 #define NUM_REGLA 3
@@ -43,7 +44,7 @@ public:
     }
     void imprimirLineaRegla(std::ostream& ostr)
     {
-        ostr << "Entrada Regla: " << lineaRegla << endl;
+        ostr << "Regla: " << lineaRegla << endl;
     }
     void imprimirRegla(std::ostream& ostr)
     {
@@ -72,7 +73,7 @@ public:
     }
     void imprimirLineaHecho(std::ostream& ostr)
     {
-        ostr << "Entrada Hecho: " << lineaHecho << endl;
+        ostr << "Hecho: " << lineaHecho << endl;
     }
     void imprimirHecho(std::ostream& ostr)
     {
@@ -90,6 +91,12 @@ bool motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> 
 int
 main(int argc, char *argv[])
 {
+    if(argc < 3)
+    {
+        cerr << "USO: "<< argv[0] << " [BC.txt] [BH.txt]."<< endl;
+        exit(ERROR);
+    }
+
     std::set<Regla> bc;
     std::set<Hecho> bh;
     std::ifstream ficheroBC, ficheroBH;
@@ -99,16 +106,26 @@ main(int argc, char *argv[])
     ficheroBH.open(fichBH, ifstream::in);
     if (!ficheroBC.is_open() || !ficheroBH.is_open())
     {
-        cerr << "ERROR: fichero de entrada inexistente." << endl;
-        exit(-1);
+        if(!ficheroBC.is_open())
+            cerr << "ERROR: fichero de entrada '"  << fichBC << "' inexistente." << endl;
+        if(!ficheroBH.is_open())
+            cerr << "ERROR: fichero de entrada '"  << fichBH << "' inexistente." << endl;
+        exit(ERROR);
     }
     std::ofstream ficheroSalida;
     const std::regex nom_fichero("([^\\s]*).txt");
-    std::sregex_token_iterator nom_fich(fichBC.begin(), fichBC.end(), nom_fichero, 1);
-
+    if (!std::regex_match(fichBC, nom_fichero) || !std::regex_match(fichBH, nom_fichero))
+    {
+        if(!std::regex_match(fichBC, nom_fichero))
+            cerr << "ERROR: fichero de entrada '"  << fichBC << "' extension incorrecta." << endl;
+        if(!std::regex_match(fichBH, nom_fichero))
+            cerr << "ERROR: fichero de entrada '"  << fichBH << "' extension incorrecta." << endl;
+        exit(ERROR);
+    }
+    std::sregex_token_iterator nom_fich(fichBC.begin(), fichBC.end(), nom_fichero, NOM_FICHERO);
     ficheroSalida.open(nom_fich->str()+fichBH, ofstream::out);
-    ficheroSalida << "Fichero BC: " << fichBC << endl;
-    ficheroSalida << "Fichero BH: " << fichBH << endl;
+    ficheroSalida << "Fichero BC: '" << fichBC << "'." << endl;
+    ficheroSalida << "Fichero BH: '" << fichBH << "'." << endl;
 
     entradaBC(bc, ficheroBC);
     std::string objetivo = entradaBH(bh, ficheroBH);
@@ -126,7 +143,7 @@ main(int argc, char *argv[])
 void
 entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
 {
-    const std::regex regla_regex("(R((\\d+)\\s*:\\s*Si\\s+))(\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)?)(\\s+Entonces\\s+)(\\w+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)", std::regex::icase);
+    const std::regex regla_linea("(R((\\d+)\\s*:\\s*Si\\s+))(\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)?)(\\s+Entonces\\s+)(\\w+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)", std::regex::icase);
     const std::regex regla_no_literal("\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)");
     const std::regex regla_conjuncion("\\w+(\\s*y\\s*\\w+)+");
     const std::regex regex_ant("\\w+");
@@ -141,11 +158,17 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
         Regla regla;
         getline(ficheroBC, linea);
         regla.lineaRegla = linea;
+        if (!std::regex_match(linea, regla_linea))
+        {
+            cerr << "ERROR: regla: '"  << linea << "' formato incorrecto." << endl;
+            cerr << "FORMATO: '[NUM_REGLA]: Si [ANTECEDENTES] Entonces [CONSECUENTE], FC=[FACTOR_CERTEZA]'." << endl;
 
-        std::sregex_token_iterator num_regla(linea.begin(), linea.end(), regla_regex, NUM_REGLA);
-        std::sregex_token_iterator antecedentes_regla(linea.begin(), linea.end(), regla_regex, ANTECEDENTES_REGLA);
-        std::sregex_token_iterator consecuente_regla(linea.begin(), linea.end(), regla_regex, CONSECUENTE_REGLA);
-        std::sregex_token_iterator factor_certeza_regla(linea.begin(), linea.end(), regla_regex, FACTOR_CERTEZA_REGLA);
+            exit(ERROR);
+        }
+        std::sregex_token_iterator num_regla(linea.begin(), linea.end(), regla_linea, NUM_REGLA);
+        std::sregex_token_iterator antecedentes_regla(linea.begin(), linea.end(), regla_linea, ANTECEDENTES_REGLA);
+        std::sregex_token_iterator consecuente_regla(linea.begin(), linea.end(), regla_linea, CONSECUENTE_REGLA);
+        std::sregex_token_iterator factor_certeza_regla(linea.begin(), linea.end(), regla_linea, FACTOR_CERTEZA_REGLA);
 
         regla.numRegla = stoi(num_regla->str());
 
@@ -187,8 +210,9 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
         regla.facCerBC = stof(factor_certeza_regla->str());
         if (regla.facCerBC < -1 || regla.facCerBC > 1)
         {
-            cerr << "ERROR: factor de certeza incorrecto" << regla.facCerBC << endl;
-            exit(0);
+            cerr << "ERROR: factor de certeza '" << regla.facCerBC << "' incorrecto."<<endl;
+            cerr << "[FACTOR_CERTEZA] es un numero entre -1 y 1." << endl;
+            exit(ERROR);
         }
         bc.insert(regla);
         regla.imprimirLineaRegla(std::cout);
@@ -199,7 +223,7 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
 std::string
 entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
 {
-    const std::regex hecho_linea("([^,]+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)");
+    const std::regex hecho_linea("([^\\s]*)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)");
     Hecho hecho;
     int numBH;
     std::string linea;
@@ -210,6 +234,12 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
     {
         getline(ficheroBH, linea);
         hecho.lineaHecho = linea;
+        if (!std::regex_match(linea, hecho_linea))
+        {
+            cerr << "ERROR: hecho: '"  << linea << "' formato incorrecto." << endl;
+            cerr << "FORMATO: '[HECHO], FC=[FACTOR_CERTEZA]'." << endl;
+            exit(ERROR);
+        }
 
         std::sregex_token_iterator nombre_hecho(linea.begin(), linea.end(), hecho_linea, NOM_HECHO);
         hecho.nomHecho = nombre_hecho->str();
@@ -219,7 +249,8 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
         if (hecho.facCerBH < -1 || hecho.facCerBH > 1)
         {
             cerr << "ERROR: factor de certeza incorrecto" << hecho.facCerBH << endl;
-            exit(0);
+            cerr << "[FACTOR_CERTEZA] es un numero entre -1 y 1." << endl;
+            exit(ERROR);
         }
         bh.insert(hecho);
         hecho.imprimirLineaHecho(std::cout);
