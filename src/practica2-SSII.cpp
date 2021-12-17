@@ -31,6 +31,7 @@ class
 {
 public:
     int numRegla;
+    std::string lineaRegla;
     std::set<std::string> antecedentes;
     int numAntecedentes;
     Tipo tipo;
@@ -39,6 +40,10 @@ public:
     bool operator < (const Regla& rhs) const
     {
         return numRegla<rhs.numRegla;
+    }
+    void imprimirLineaRegla(std::ostream& ostr)
+    {
+        ostr << "Entrada Regla: " << lineaRegla << endl;
     }
     void imprimirRegla(std::ostream& ostr)
     {
@@ -63,18 +68,18 @@ public:
     std::string lineaHecho;
     bool operator < (const Hecho& rhs) const
     {
-        return facCerBH<rhs.facCerBH;
+        return nomHecho<rhs.nomHecho;
     }
-    void imprimirHecho2(std::ostream& ostr)
+    void imprimirLineaHecho(std::ostream& ostr)
+    {
+        ostr << "Entrada Hecho: " << lineaHecho << endl;
+    }
+    void imprimirHecho(std::ostream& ostr)
     {
         ostr << "--------------------" <<" Entrada Hecho (" << nomHecho << ") " << "---------------------"  << endl;
         ostr << "Hecho (nomHecho): " << nomHecho << endl;
         ostr << "Hecho (facCerBH): " << facCerBH << endl;
         ostr << "------------------------------------------------------------" << endl;
-    }
-    void imprimirHecho(std::ostream& ostr)
-    {
-        ostr << "Hecho: "<< lineaHecho << endl;
     }
 };
 
@@ -135,7 +140,7 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
     {
         Regla regla;
         getline(ficheroBC, linea);
-        cout << "Entrada Regla (" << i+1 << "): " << linea << endl;
+        regla.lineaRegla = linea;
 
         std::sregex_token_iterator num_regla(linea.begin(), linea.end(), regla_regex, NUM_REGLA);
         std::sregex_token_iterator antecedentes_regla(linea.begin(), linea.end(), regla_regex, ANTECEDENTES_REGLA);
@@ -186,6 +191,7 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
             exit(0);
         }
         bc.insert(regla);
+        regla.imprimirLineaRegla(std::cout);
         regla.imprimirRegla(std::cout);
     }
 }
@@ -203,7 +209,7 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
     for (int i = 0; i < numBH && !ficheroBH.eof(); i++)
     {
         getline(ficheroBH, linea);
-        cout << "Entrada Hecho (" << i+1 << "): " << linea << endl;
+        hecho.lineaHecho = linea;
 
         std::sregex_token_iterator nombre_hecho(linea.begin(), linea.end(), hecho_linea, NOM_HECHO);
         hecho.nomHecho = nombre_hecho->str();
@@ -216,6 +222,7 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
             exit(0);
         }
         bh.insert(hecho);
+        hecho.imprimirLineaHecho(std::cout);
         hecho.imprimirHecho(std::cout);
     }
 
