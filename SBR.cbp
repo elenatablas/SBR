@@ -63,7 +63,6 @@
 		<Unit filename="pruebas/p6/BC-prueba6.txt" />
 		<Unit filename="pruebas/p6/BH-prueba6.txt" />
 		<Unit filename="src/practica2-SSII.cpp" />
-		<Unit filename="src/prueba.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
