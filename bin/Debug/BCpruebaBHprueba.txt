@@ -1,2 +1,0 @@
-Fichero BC: 'BCprueba.txt'.
-Fichero BH: 'BHprueba.txt'.
