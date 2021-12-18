@@ -56,7 +56,7 @@ public:
     }
     void imprimirRegla(std::ostream& ostr)
     {
-        ostr << "--------------------" <<" Entrada Regla (" << numRegla << ") " << "---------------------"  << endl;
+        ostr << "--------------------" <<" Regla (" << numRegla << ") " << "---------------------"  << endl;
         ostr << "Regla (numRegla): "<< numRegla << endl;
         ostr << "Regla (tipo): "<< tipo << endl;
         ostr << "Regla (lineaAntecedentes): " << lineaAntecedentes << endl;
@@ -86,7 +86,7 @@ public:
     }
     void imprimirHecho(std::ostream& ostr)
     {
-        ostr << "--------------------" <<" Entrada Hecho (" << nomHecho << ") " << "---------------------"  << endl;
+        ostr << "--------------------" <<" Hecho (" << nomHecho << ") " << "---------------------"  << endl;
         ostr << "Hecho (nomHecho): " << nomHecho << endl;
         ostr << "Hecho (facCerBH): " << facCerBH << endl;
         ostr << "------------------------------------------------------------" << endl;
@@ -133,8 +133,10 @@ main(int argc, char *argv[])
     }
     std::sregex_token_iterator nom_fich(fichBC.begin(), fichBC.end(), nom_fichero, NOM_FICHERO);
     ficheroSalida.open(nom_fich->str()+fichBH, ofstream::out);
+    ficheroSalida << "-------------------" <<" Ficheros de entrada " << "--------------------"  << endl;
     ficheroSalida << "Fichero BC: '" << fichBC << "'." << endl;
     ficheroSalida << "Fichero BH: '" << fichBH << "'." << endl;
+    ficheroSalida << "------------------------------------------------------------" << endl;
 
     entradaBC(bc, ficheroBC);
     std::string objetivo = entradaBH(bh, ficheroBH);
@@ -291,12 +293,20 @@ bool verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> &bh, st
 void
 motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> &bh, std::ostream& ostr)
 {
+    ostr << "-------------------" <<" Inferencia en un SBR " << "-------------------"  << endl;
+    ostr << "(Razonamiento dirigido por Metas)"<< endl;
     ostr << "Objetivo: " << objetivo << endl;
     ostr << "Proceso de Inferencia: " << endl;
     int espacios = 0;
     if(verificar(objetivo, bc, bh, ostr, espacios))
     {
         ostr << "Return TRUE" << endl;
+        ostr << "------------------------------------------------------------" << endl;
+        for(auto hecho : bh)
+            if(!objetivo.compare(hecho.nomHecho))
+            {
+                hecho.imprimirHecho(ostr);
+            }
     }
     else
     {
