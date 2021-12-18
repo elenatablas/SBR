@@ -445,7 +445,7 @@ verificar(std::string meta, std::set<Regla> bc, std::set<Hecho> &bh, std::ostrea
     else
     {
         equiparar(conjuntoConflicto, bc, meta);
-        if (noVacio(conjuntoConflicto, meta, ostr) && !verificado)
+        while (noVacio(conjuntoConflicto, meta, ostr) && !verificado)
         {
             Regla r = resolver(conjuntoConflicto, ostr);
             nuevasMetas = extraerAntecedentes(r, ostr);
