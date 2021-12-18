@@ -31,3 +31,12 @@
 	<regex>
 	<set>
 
+1639850786 source:c:\users\elenapérez\github\workspace_ssii\sbr\src\practica2-ssii.cpp
+	<iostream>
+	<fstream>
+	<iterator>
+	<regex>
+	<string>
+	<set>
+	<functional>
+
