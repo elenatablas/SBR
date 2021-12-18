@@ -26,6 +26,7 @@ enum TipoRep
     disyuncion
 };
 typedef enum TipoRep Tipo;
+int espacios = 0;
 
 class
     Regla
@@ -84,9 +85,9 @@ public:
     }
 };
 
-std::string entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH);
-void entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC);
-bool motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh);
+std::string entradaBH(std::set<Hecho> &bh, std::ifstream &ficheroBH);
+void entradaBC(std::set<Regla> &bc, std::ifstream &ficheroBC);
+void motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> &bh, std::ostream& ostr);
 
 int
 main(int argc, char *argv[])
@@ -130,18 +131,17 @@ main(int argc, char *argv[])
     entradaBC(bc, ficheroBC);
     std::string objetivo = entradaBH(bh, ficheroBH);
 
-    //motorInferencias(objetivo, bc, bh);
+    motorInferencias(objetivo, bc, bh, ficheroSalida);
+    //motorInferencias(objetivo, bc, bh, cout);
 
-    printf("4\n");
     ficheroBC.close();
     ficheroBH.close();
     ficheroSalida.close();
-    printf("5\n");
     return 0;
 }
 
 void
-entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
+entradaBC(std::set<Regla> &bc, std::ifstream &ficheroBC)
 {
     const std::regex regla_linea("(R((\\d+)\\s*:\\s*Si\\s+))(\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)?)(\\s+Entonces\\s+)(\\w+)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)", std::regex::icase);
     const std::regex regla_no_literal("\\w+((\\s*y\\s*\\w+)+|(\\s*o\\s*\\w+)+)");
@@ -215,13 +215,13 @@ entradaBC(std::set<Regla> bc, std::ifstream &ficheroBC)
             exit(ERROR);
         }
         bc.insert(regla);
-        regla.imprimirLineaRegla(std::cout);
-        regla.imprimirRegla(std::cout);
+        //regla.imprimirLineaRegla(std::cout);
+        //regla.imprimirRegla(std::cout);
     }
 }
 
 std::string
-entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
+entradaBH(std::set<Hecho> &bh, std::ifstream &ficheroBH)
 {
     const std::regex hecho_linea("([^\\s]*)(,\\s+FC\\s*=\\s*)(-?\\d+(\\.\\d+)?)");
     Hecho hecho;
@@ -253,8 +253,8 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
             exit(ERROR);
         }
         bh.insert(hecho);
-        hecho.imprimirLineaHecho(std::cout);
-        hecho.imprimirHecho(std::cout);
+        //hecho.imprimirLineaHecho(std::cout);
+        //hecho.imprimirHecho(std::cout);
     }
 
     std::string objetivo;
@@ -263,118 +263,204 @@ entradaBH(std::set<Hecho> bh, std::ifstream &ficheroBH)
 
     return objetivo;
 }
-/*
+
+void
+imprimirEspacio(std::ostream& ostr)
+{
+    for(int i=0; i<espacios*2; i++)
+    {
+        ostr << " ";
+    }
+}
+
 //Encadenamiento hacia atrás o Dirigido por Metas
 //   Determina si se verifica una cierta meta con los hechos disponibles.
 //    La inferencia progresa en la red de derecha a izquierda
-bool verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh);
+bool verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> &bh, std::ostream& ostr);
 
-bool
-motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh)
+void
+motorInferencias(std::string objetivo, std::set<Regla> bc, std::set<Hecho> &bh, std::ostream& ostr)
 {
-    ficheroSalida << "Objetivo: " << objetivo << endl;
-    ficheroSalida << "Proceso de Inferencia: " << endl;
-    ficheroSalida << "1- Cómo se activa la red: " << endl;
-    //ficheroSalida << "2- CASO-i de inferencia que se va aplicando: " << endl;
-
-    bool encontrado = verificar(objetivo, bc, bh);
-    return encontrado;
+    ostr << "Objetivo: " << objetivo << endl;
+    ostr << "Proceso de Inferencia: " << endl;
+    if(verificar(objetivo, bc, bh, ostr))
+    {
+        ostr << "Return TRUE" << endl;
+    }else
+    {
+        ostr << "Return FALSE" << endl;
+    }
 }
 
 bool
-contenida(std::string objetivo, std::set<Hecho> bh)
+contenida(std::string meta, std::set<Hecho> bh, std::ostream& ostr)
 {
+    std::string bhString;
+    imprimirEspacio(ostr);
+    ostr << "Verificar("<< meta<<",{";
+    for(auto h: bh)
+        bhString+= h.nomHecho + ",";
     for(auto hecho : bh)
-        if(strcmp(hecho.nomhecho,objetivo))
     {
-        ficheroSalida << "Hecho Objetivo con su FC: " << hecho.cadena  << endl;
-        return true;
-    }
+        if(!meta.compare(hecho.nomHecho))
+        {
 
+            ostr<< bhString << "}) ---> true // Recursion: " << meta << " en BH" <<endl;
+            imprimirEspacio(ostr);
+            ostr << "BH={" << bhString << "}" << endl;
+            return true;
+        }
+    }
+    ostr<< bhString << "}) // Recursion " << endl;
     return false;
 }
 
-std::string
-consecuentes(std::set<Regla> bc)
+void
+equiparar(std::set<Regla> &conjuntoConflicto, std::set<Regla> bc, std::string objetivo)
 {
-    return NULL;
-}
-
-std::string
-equiparar(std::set<Regla> bc, std::string objetivo)
-{
-    return NULL;
-}
-
-std::string
-consecuentes(std::set<Regla> bc)
-{
-    return NULL;
+    for(auto regla : bc)
+        if(!objetivo.compare(regla.consecuente))
+        {
+            conjuntoConflicto.insert(regla);
+        }
 }
 
 bool
-noVacio(std::set<Regla> conjuntoVacio)
+noVacio(std::set<Regla> conjuntoConflicto, std::string objetivo, std::ostream& ostr)
 {
-    return true;
+    if(!conjuntoConflicto.empty())
+    {
+        imprimirEspacio(ostr);
+        ostr << "Conjunto Conflicto={";
+        for(auto regla : conjuntoConflicto)
+        {
+            ostr << "R"<< regla.numRegla << ",";
+        }
+        ostr << "} // " << objetivo << " es consecuente de estas reglas" << endl;
+        return true;
+    }
+    return false;
+}
+
+Regla
+resolver(std::set<Regla> &conjuntoConflicto, std::ostream& ostr)
+{
+    set<Regla>::iterator it;
+    it = conjuntoConflicto.begin();
+    Regla resolver = *it;
+    conjuntoConflicto.erase(it);
+    imprimirEspacio(ostr);
+    ostr << "R={R"<< resolver.numRegla << "} // Seleccionar regla R"<< resolver.numRegla << endl;
+    imprimirEspacio(ostr);
+    ostr << "Eliminar R"<< resolver.numRegla << " ---> Conjunto Conflicto={";
+    for(auto regla : conjuntoConflicto)
+    {
+        ostr << "R"<< regla.numRegla << ",";
+    }
+    ostr << "}" << endl;
+    return resolver;
+}
+
+std::set<std::string>
+extraerAntecedentes(Regla regla, std::ostream& ostr)
+{
+    imprimirEspacio(ostr);
+    ostr << "NuevasMetas={";
+    for(auto literal : regla.antecedentes)
+    {
+        ostr << literal << ",";
+    }
+    ostr << "} // Antecedentes de R"<< regla.numRegla << "; Verificado = true" << endl;
+    return regla.antecedentes;
 }
 
 std::string
-resolver(std::set<Regla> conjuntoConflicto)
+seleccionarMeta(std::set<string> &nuevasMetas, std::ostream& ostr)
 {
-    return NULL;
+    std::set<string>::iterator it;
+    it = nuevasMetas.begin();
+    std::string nMeta = *it;
+    imprimirEspacio(ostr);
+    ostr << "Meta="<< nMeta << " // Seleccionar "<< nMeta << " de NuevasMetas" << endl;
+
+    nuevasMetas.erase(it);
+    imprimirEspacio(ostr);
+    ostr << "NuevasMetas={";
+    for(auto meta : nuevasMetas)
+    {
+        ostr << meta << ",";
+    }
+    ostr << "} // Eliminar "<< nMeta << " de NuevasMetas" << endl;
+    return nMeta;
 }
 
 void
-eliminar(std::string r, std::set<Regla> conjuntoConflicto)
+addObjetivo(std::string objetivo, std::set<Hecho> &bh, std::ostream& ostr)
 {
+    Hecho hecho;
+    float facCerBH = 0.9; //TODO: Calcular factor de certeza
+    if (facCerBH < -1 || facCerBH > 1)
+    {
+        cerr << "ERROR: factor de certeza incorrecto" << facCerBH << " del hecho calculado " << objetivo << endl;
+        cerr << "[FACTOR_CERTEZA] es un numero entre -1 y 1." << endl;
+        exit(ERROR);
+    }
+
+    hecho.lineaHecho = objetivo+", FC="+std::to_string(facCerBH);
+    hecho.nomHecho = objetivo;
+    hecho.facCerBH =  facCerBH;
+    bh.insert(hecho);
+    imprimirEspacio(ostr);
+    ostr << "BH={";
+    for(auto hecho : bh)
+    {
+        ostr << hecho.nomHecho << ",";
+    }
+    ostr << "} // Insertar "<< objetivo << " a la Base de Hechos" << endl;
 }
 
-std::string
-extraerAntecedentes(std::set<std::string> r)
+void imprimirMensajeVerificar(std::ostream& ostr)
 {
+    espacios++;
+    imprimirEspacio(ostr);
+    ostr << "###########################" << endl;
+    imprimirEspacio(ostr);
+    ostr << "# Llamada ("<< espacios <<") a verificar #" << endl;
+    imprimirEspacio(ostr);
+    ostr << "###########################" << endl;
 }
-
-std::string
-seleccionarMeta(std::set<Hecho> nuevasMetas)
-{
-}
-
-void
-añadir(std::string objetivo, std::set<Hecho> bh)
-{
-}
-
 bool
-verificar(std::string objetivo, std::set<Regla> bc, std::set<Hecho> bh ))
+verificar(std::string meta, std::set<Regla> bc, std::set<Hecho> &bh, std::ostream& ostr )
 {
 
     bool verificado = false;
-    std::set<Regla> conjuntoConflicto = NULL;
-    std::set<Regla> conjuntoVacio = NULL;
-    std::stringr = NULL;
-    std::set<Hecho>nuevasMetas = NULL;
-    std::string nMet = NULL;
+    std::set<Regla> conjuntoConflicto;
+    std::set<string> nuevasMetas;
+    std::string nMet;
 
-    if (contenida(objetivo, bh)) return true;
+    imprimirMensajeVerificar(ostr);
 
-    conjuntoConflicto = equiparar(consecuentes(bc), objetivo);
-    while (noVacio(conjuntoVacio))
+    if (contenida(meta, bh, ostr))
+        return true;
+    else
     {
-        r = resolver(conjuntoConflicto);
-        eliminar(r, conjuntoConflicto);
-        nuevasMetas = extraerAntecedentes(r);
-        verificado = true;
-        while (noVacio(nuevasMetas) && verificado)
+        equiparar(conjuntoConflicto, bc, meta);
+        if (noVacio(conjuntoConflicto, meta, ostr) && !verificado)
         {
-            nMet = seleccionarMeta(nuevasMetas);
-            eliminar(nMet, nuevasMetas);
-            verificado = verificar(nMet, bh);
-        }
-        if (verificado)
-        {
-            añadir(objetivo, bh);
+            Regla r = resolver(conjuntoConflicto, ostr);
+            nuevasMetas = extraerAntecedentes(r, ostr);
+            verificado = true;
+            while (!nuevasMetas.empty() && verificado)
+            {
+                nMet = seleccionarMeta(nuevasMetas, ostr);
+                verificado = verificar(nMet, bc, bh, ostr);
+            }
+            if (verificado)
+            {
+                addObjetivo(meta, bh, ostr);
+            }
         }
     }
     return (verificado);
 }
-*/
+
