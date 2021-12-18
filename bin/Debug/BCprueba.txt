@@ -1,0 +1,7 @@
+5
+R1: Si A y B Entonces P, FC=0.5
+R2: Si B y C Entonces M, FC=0.9
+R3: Si D y E y F Entonces N, FC=0.5
+R4: Si N y G Entonces M, FC=1
+R5: Si M y H Entonces Q, FC=-0.5
+
