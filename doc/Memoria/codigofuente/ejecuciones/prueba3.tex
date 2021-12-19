@@ -2,15 +2,15 @@
 
 \section{Prueba 3}
 
-\begin{comment}
-R1: Si c Entonces h, FC=0.4
-R2: Si c Entonces i, FC=0.75
-R3: Si d Entonces i, FC=-0.4
-R4: Si e Entonces h, FC=-0.55
-R5: Si g y b Entonces i, FC=-0.1
-R6: Si f Entonces h, FC=-0.6
-\end{comment}
 \subsection{Red de inferencia}
+\par Esta red de inferencia se debe interpretar de izquierda a derecha.
+Los rectángulos azules son las reglas, los grises que están ligados por la izquierda 
+de ellas son sus antecedentes, si estos antecedentes convergen en un cuadrado 
+quiere decir que es la conjunción de esos literales, en caso contrario son disyunciones
+o simplemente un literal. Los rectángulos grises unidos a las reglas por la derecha
+son sus consecuentes respectivamente. Además, incluyo los factores de certeza propocionados por
+la Base de hechos y la Base de Conocimiento iniciales.
+
 \begin{center}
 	\tikzstyle{regla}= [rectangle,draw,black,fill=blue!15]
 	\tikzstyle{hecho}= [rectangle,draw,black,fill=black!15]
@@ -74,13 +74,7 @@ R6: Si f Entonces h, FC=-0.6
 
 	\end{tikzpicture}
 \end{center}
-\par Esta red de inferencia se debe interpretar de izquierda a derecha.
-Los rectángulos azules son las reglas, los grises que están ligados por la izquierda 
-de ellas son sus antecedentes, si estos antecedentes convergen en un cuadrado 
-quiere decir que es la conjunción de esos literales, en caso contrario son disyunciones
-o simplemente un literal. Los rectángulos grises unidos a las reglas por la derecha
-son sus consecuentes respectivamente. Además, incluyo los factores de certeza propocionados por
-la Base de hechos y la Base de Conocimiento iniciales.
+
 
 \subsection{Proceso de inferencia con Objetivo \texttt{ganaEst}}
 \begin{listing}[language=Pascal]
@@ -221,6 +215,7 @@ Return TRUE
 \par Hecho (facCerBH): 0.624625
 \par ------------------------------------------------------------
 \end{center}
+\newpage
 \subsection{Cuestión}
 \begin{ejer}
 	\textbf{Prueba 3.} ¿Quién ganará este tercer partido y, por tanto, la liga?
