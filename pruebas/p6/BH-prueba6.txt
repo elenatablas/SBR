@@ -1,0 +1,5 @@
+2
+matriculado, FC=1
+casa, FC=0.3
+Objetivo
+entrevista

@@ -1,29 +1,50 @@
 \section{Prueba 6}
 \subsection{Enunciado del problema}
-Refleja al menos 5 reglas y 5 hechos
+\par Sabemos que la práctica dos de la asignatura de Sistemas Inteligentes tiene una
+fase de entrevista y hay un alumno que podría ser candidato para realizarla.
+\par Consideremos el siguiente conocimiento:
+\begin{enumerate}
+    \item Un alumno matriculado en la asignatura hay evidencia a favor (0.7) que entrega la práctica uno.
+    \item Un alumno matriculado en la asignatura hay evidencia a favor (0.4) que entrega la práctica dos.
+    \item Un alumno entrega la practica uno y la practica dos hay evidencia a favor (0.8) que
+realice la entrevista.
+    \item Un alumno estudia en casa hay evidencia a favor (0.6) que trabaje en clase. 
+    \item Un alumno trabaja en clase hay evidencia a favor (0.9) que entrega la práctica uno.
+la entrevista.
+    \item Si el alumno trabaja en clase hay bastante evidencia en contra (-0.9) que realice la entrevista.
+\end{enumerate}
+\par Y disponemos de las siguientes evidencias: alumno matriculado en la asignatura,
+pero no estudia mucho en casa (entenderemos que su factor de certeza es de 0.3).
 
 \subsection{Formalización del problema}
 \par Sea la siguiente signatura:
-\par $\sum={}$
+\par \texttt{$\sum$ = \{matriculado, practicaUno, practicaDos, clase, casa, entrevista\}}
 \par donde
 \begin{itemize}
-    \item a =
-    \item b =
+    \item \texttt{matriculado} = ``El alumno está matriculado en la asignatura de Sistemas Inteligentes.''
+    \item \texttt{practicaUno} = ``El alumno entrega la práctica uno.''
+    \item \texttt{practicaDos} = ``El alumno entrega la práctica dos.''
+    \item \texttt{clase} = ``El alumno trabaja en clase de Sistemas Inteligentes.''
+    \item \texttt{casa} = ``El alumno estudia en casa Sistemas Inteligentes.''
+    \item \texttt{entrevista} = ``El alumno realiza entrevista de la practica dos.''
 \end{itemize}
 
 \subsection{Base de Conocimiento (BC)}
 Reglas:
 \begin{itemize}
-    \item R1:
-    \item R2:
-    \item R3:
+    \item R1: Si \texttt{matriculado} Entonces \texttt{practicaUno}, $FC=0.7$
+    \item R2: Si \texttt{matriculado} Entonces \texttt{practicaDos}, $FC=0.4$
+    \item R3: Si \texttt{practicaUno} y \texttt{practicaDos} Entonces \texttt{entrevista}, $FC=0.8$
+    \item R4: Si \texttt{casa} Entonces \texttt{clase}, $FC=0.6$
+    \item R5: Si \texttt{clase} Entonces \texttt{practicaUno}, $FC=0.9$
+    \item R6: Si \texttt{clase} Entonces \texttt{entrevista}, $FC=-0.9$
 \end{itemize}
 
 \subsection{Base de Hechos (BH)}
 Hechos:
 \begin{itemize}
-    \item $FC()= 1;$
-    \item $FC()=2;$
+    \item \texttt{matriculado}, $FC(\texttt{matriculado}) = 1$
+    \item \texttt{casa}, $FC(\texttt{casa}) = 0.3$
 \end{itemize}
 \newpage
 

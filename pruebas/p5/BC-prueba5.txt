@@ -1,0 +1,8 @@
+7
+R1: Si casos Entonces confinar, FC=0.5
+R2: Si transporte o pasear, Entonces casos, FC=0.4
+R3: Si transporte y fiesta, Entonces casos, FC=0.9
+R4: Si noMascarilla Entonces casos, FC=0.8
+R5: Si fiesta y casos Entonces aforo, FC=0.8
+R6: Si noMascarilla Entonces aforo, FC=1
+R7: Si aforo Entonces confinar, FC=0.4

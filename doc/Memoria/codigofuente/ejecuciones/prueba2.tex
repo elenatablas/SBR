@@ -62,9 +62,122 @@
 
 	\end{tikzpicture}
 \end{center}
+\par Esta red de inferencia se debe interpretar de arriba a abajo.
+Los rectángulos azules son las reglas, los grises que están ligados por encima 
+de ellas son sus antecedentes, si estos antecedentes convergen en un cuadrado 
+quiere decir que es la conjunción de esos literales, en caso contrario son disyunciones
+o simplemente un literal. Los rectángulos grises que cuelgan de las reglas 
+son sus consecuentes respectivamente. Además, incluyo los factores de certeza propocionados por
+la Base de hechos y la Base de Conocimiento iniciales.
 
+\subsection{Proceso de inferencia}
+\begin{listing}[language=Pascal]
+(Razonamiento dirigido por Metas)
+Objetivo: I
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+	Verificar(I,{A,B,D,E,F,G}) // Recursion 
+	Conjunto Conflicto={R3} // I es consecuente de estas reglas
+	R={R3} // Seleccionar regla R3
+	Eliminar R3 ---> Conjunto Conflicto={}
+	NuevasMetas={C,H} // Antecedentes de R3; Verificado = true
+	Meta=C // Seleccionar C de NuevasMetas
+	NuevasMetas={H} // Eliminar C de NuevasMetas
+  ###########################
+  # Llamada (2) a verificar #
+  ###########################
+	Verificar(C,{A,B,D,E,F,G}) // Recursion 
+	Conjunto Conflicto={R1,R2} // C es consecuente de estas reglas
+	R={R1} // Seleccionar regla R1
+	Eliminar R1 ---> Conjunto Conflicto={R2}
+	NuevasMetas={A,B} // Antecedentes de R1; Verificado = true
+	Meta=A // Seleccionar A de NuevasMetas
+	NuevasMetas={B} // Eliminar A de NuevasMetas
+  ###########################
+  # Llamada (3) a verificar #
+  ###########################
+	Verificar(A,{A,B,D,E,F,G}) ---> true // Recursion: A en BH
+	BH={A,B,D,E,F,G}
+	Meta=B // Seleccionar B de NuevasMetas
+	NuevasMetas={} // Eliminar B de NuevasMetas
+  ###########################
+  # Llamada (4) a verificar #
+  ###########################
+	Verificar(B,{A,B,D,E,F,G}) ---> true // Recursion: B en BH
+	BH={A,B,D,E,F,G}
+	(CASO 1): Combinacion de antecedentes de R1
+	 FC(A o B)=min(FC(A),FC(B))=0.6
+	(CASO 3): Combinacion de la evidencia con la regla R1
+	 FC(C{R1})=0.7*max(0,FC(A o B))=0.42
+	Conjunto Conflicto={R2} // C es consecuente de estas reglas
+	R={R2} // Seleccionar regla R2
+	Eliminar R2 ---> Conjunto Conflicto={}
+	NuevasMetas={D,E,F} // Antecedentes de R2; Verificado = true
+	Meta=D // Seleccionar D de NuevasMetas
+	NuevasMetas={E,F} // Eliminar D de NuevasMetas
+  ###########################
+  # Llamada (5) a verificar #
+  ###########################
+	Verificar(D,{A,B,D,E,F,G}) ---> true // Recursion: D en BH
+	BH={A,B,D,E,F,G}
+	Meta=E // Seleccionar E de NuevasMetas
+	NuevasMetas={F} // Eliminar E de NuevasMetas
+  ###########################
+  # Llamada (6) a verificar #
+  ###########################
+	Verificar(E,{A,B,D,E,F,G}) ---> true // Recursion: E en BH
+	BH={A,B,D,E,F,G}
+	Meta=F // Seleccionar F de NuevasMetas
+	NuevasMetas={} // Eliminar F de NuevasMetas
+  ###########################
+  # Llamada (7) a verificar #
+  ###########################
+	Verificar(F,{A,B,D,E,F,G}) ---> true // Recursion: F en BH
+	BH={A,B,D,E,F,G}
+	(CASO 1): Combinacion de antecedentes de R2
+	 FC(D y E y F)=min(FC(D),FC(E),FC(F),)=0.7
+	(CASO 3): Combinacion de la evidencia con la regla R2
+	 FC(C{R2})=0.5*max(0,FC(D y E y F))=0.35
+	(CASO 2): Combinacion de las reglas R1 y R2
+	 FC(C)=FC(C{R1}) + FC(C{R2})*(1-FC(C{R1}))=0.623
+	BH={A,B,C,D,E,F,G} // Insertar C a la Base de Hechos
+	Meta=H // Seleccionar H de NuevasMetas
+	NuevasMetas={} // Eliminar H de NuevasMetas
+  ###########################
+  # Llamada (8) a verificar #
+  ###########################
+	Verificar(H,{A,B,C,D,E,F,G}) // Recursion 
+	Conjunto Conflicto={R4} // H es consecuente de estas reglas
+	R={R4} // Seleccionar regla R4
+	Eliminar R4 ---> Conjunto Conflicto={}
+	NuevasMetas={G} // Antecedentes de R4; Verificado = true
+	Meta=G // Seleccionar G de NuevasMetas
+	NuevasMetas={} // Eliminar G de NuevasMetas
+  ###########################
+  # Llamada (9) a verificar #
+  ###########################
+	Verificar(G,{A,B,C,D,E,F,G}) ---> true // Recursion: G en BH
+	BH={A,B,C,D,E,F,G}
+	(CASO 3): Combinacion de la evidencia con la regla R4
+	 FC(H{R4})=0.6*max(0,FC(G))=0
+	BH={A,B,C,D,E,F,G,H} // Insertar H a la Base de Hechos
+	(CASO 1): Combinacion de antecedentes de R3
+	 FC(C o H)=min(FC(C),FC(H))=0.623
+	(CASO 3): Combinacion de la evidencia con la regla R3
+	 FC(I{R3})=0.65*max(0,FC(C o H))=0.40495
+	BH={A,B,C,D,E,F,G,H,I} // Insertar I a la Base de Hechos
+Return TRUE	
+\end{listing}
 
 \subsection{Objetivo obtenido por SBR-FC}
+\begin{center}
+\par -------------------- Hecho (I) ---------------------
+\par Hecho (nomHecho): I
+\par Hecho (facCerBH): 0.40495
+\par --------------------------------------------------------
+\end{center}
 
 \subsection{Cuestión}
 \begin{ejer}
@@ -73,3 +186,4 @@
 	\texttt{E} con grado 0.7, \texttt{F} con grado 0.8 y \texttt{G} no se está cumpliendo con grado 0.3. \\
 	Con esta información, ¿con qué grado se cumple \texttt{I}?
 \end{ejer}
+\par Solución: Se cumple con grado 0.40495.

@@ -1,28 +1,43 @@
 \section{Prueba 5}
 \subsection{Enunciado del problema}
-Refleja al menos 5 reglas y 5 hechos
-
+Estamos en pandemia, los poblacion sale de fiesta con 0.5, a veces lleva la mascarilla con certeza de 0.4, utiliza el transporte público con 0.3 y no suele pasear (entendemos que su factor de certeza es de 0.2).
+\par Si los casos de covid aumentan, la evidencia de que nos confinen es de 0.5. Si usamos el transporte público o paseamos es una evidencia a favor (0.4) de que hay más casos.
+En cambio, Si usamos el transporte público y salimos de fiesta es una evidencia a favor (0.9) de que hay más casos.
+Además, sabemos que cuando la población no lleva mascarilla, se tiene una evidencia de 0.8 los casos de covid aumentan. Si la población sale de fiesta  y hay casos covid entonces se reduce el aforo (entendemos que su factor de certeza es 0.3). 
+También, si la población no lleva mascarilla, se reduce siempre el aforo en ciertos lugares. Si se reduce el aforo es una evidencia de 0.4 que nos confinen.
+¿La población se confina?
 \subsection{Formalización del problema}
 \par Sea la siguiente signatura:
-\par $\sum={}$
+\par \texttt{$\sum$ = \{casos, noMascarilla, aforo, fiesta, transporte, pasear, confinar\} }
 \par donde
 \begin{itemize}
-    \item a =
-    \item b =
+    \item \texttt{casos} = ``Los casos de covid aumentan.''
+    \item \texttt{noMascarilla} = ``La población no lleva mascarilla.''
+    \item \texttt{aforo} = ``El aforo se reduce en ciertos lugares.''
+    \item \texttt{fiesta} = ``La población sale de fiesta.''
+    \item \texttt{transporte} = ``La población viaja en transporte público.''
+    \item \texttt{pasear} = ``La población pasea.''
+    \item \texttt{confinar} = ``La población se confina.''
 \end{itemize}
 
 \subsection{Base de Conocimiento (BC)}
 Reglas:
 \begin{itemize}
-    \item R1:
-    \item R2:
-    \item R3:
+    \item R1: Si \texttt{casos} Entonces \texttt{confinar}, $FC=0.5$
+    \item R2: Si \texttt{transporte} o \texttt{pasear}, Entonces \texttt{casos}, $FC=0.4$
+    \item R3: Si \texttt{transporte} y \texttt{fiesta}, Entonces \texttt{casos}, $FC=0.9$
+    \item R4: Si \texttt{noMascarilla} Entonces \texttt{casos}, $FC=0.8$
+    \item R5: Si \texttt{fiesta} y \texttt{casos} Entonces \texttt{aforo}, $FC=0.8$
+    \item R6: Si \texttt{noMascarilla} Entonces \texttt{aforo}, $FC=1$
+    \item R7: Si \texttt{aforo} Entonces \texttt{confinar}, $FC=0.4$
 \end{itemize}
 
 \subsection{Base de Hechos (BH)}
 Hechos:
 \begin{itemize}
-    \item $FC()= 1;$
-    \item $FC()=2;$
+    \item \texttt{fiesta}, $FC(\texttt{fiesta}) = 0.5$
+    \item \texttt{transporte}, $FC(\texttt{transporte}) = 0.3$
+    \item \texttt{pasear}, $FC(\texttt{pasear}) = 0.2$
+    \item \texttt{noMascarilla}, $FC(\texttt{noMascarilla}) = 0.4$
 \end{itemize}
 \newpage

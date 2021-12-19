@@ -1,0 +1,7 @@
+4
+fiesta, FC=0.5
+transporte, FC=0.3
+pasear, FC=0.2
+noMascarilla, FC=0.4
+Objetivo
+confinar

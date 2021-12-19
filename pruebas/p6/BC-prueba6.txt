@@ -1,0 +1,7 @@
+6
+R1: Si matriculado Entonces practicaUno, FC=0.7
+R2: Si matriculado Entonces practicaDos, FC=0.4
+R3: Si practicaUno y practicaDos Entonces entrevista, FC=0.8
+R4: Si casa Entonces clase, FC=0.6
+R5: Si clase Entonces practicaUno, FC=0.9
+R6: Si clase Entonces entrevista, FC=-0.9

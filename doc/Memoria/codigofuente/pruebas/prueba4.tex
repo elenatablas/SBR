@@ -6,16 +6,16 @@
 experimentado, cansado, joven, alcohol, nosolo, causante\}}
 \par donde
 \begin{itemize}
-    \item \texttt{antigüedad2-3} = ``El conductor tiene antigüedad entre 2-3 años''
-    \item \texttt{antigüedad>3} = ``El conductor tiene antigüedad mayor de 3 años''
-    \item \texttt{conduce2-3} = ``El conductor conduce entre 2-3 horas''
-    \item \texttt{conduce>3} = ``El conductor conduce más de tres horas''
-    \item \texttt{experimentado} = ``El conductor es experimentado''
-    \item \texttt{cansado} = ``El conductor está cansado''
-    \item \texttt{joven} = ``El conductor es joven''
-    \item \texttt{alchool} = ``El conductor bebe alchool''
-    \item \texttt{nosolo} = ``El conductor no viaja solo''
-    \item \texttt{causante} = ``El conductor causante del accidente de tráfico''
+    \item \texttt{antigüedad2-3} = ``El conductor tiene antigüedad entre 2-3 años.''
+    \item \texttt{antigüedad>3} = ``El conductor tiene antigüedad mayor de 3 años.''
+    \item \texttt{conduce2-3} = ``El conductor conduce entre 2-3 horas.''
+    \item \texttt{conduce>3} = ``El conductor conduce más de tres horas.''
+    \item \texttt{experimentado} = ``El conductor es experimentado.''
+    \item \texttt{cansado} = ``El conductor está cansado.''
+    \item \texttt{joven} = ``El conductor es joven.''
+    \item \texttt{alcohol} = ``El conductor bebe alcohol.''
+    \item \texttt{nosolo} = ``El conductor no viaja solo.''
+    \item \texttt{causante} = ``El conductor causante del accidente de tráfico.''
 \end{itemize}
 
 \subsection{Base de Conocimiento (BC)}
@@ -27,7 +27,7 @@ Reglas:
     \item R4: Si \texttt{conduce>3} Entonces \texttt{cansado}, $FC=1$
     \item R5: Si \texttt{experimentado} y \texttt{nosolo} Entonces \texttt{causante}, $FC=-0.5$
     \item R6: Si \texttt{cansado} Entonces \texttt{causante}, $FC=0.5$
-    \item R7: Si \texttt{joven} y \texttt{alchool} Entonces \texttt{causante}, $FC=0.7$ 
+    \item R7: Si \texttt{joven} y \texttt{alcohol} Entonces \texttt{causante}, $FC=0.7$ 
 \end{itemize}
 
 \subsection{Base de Hechos (BH)}
