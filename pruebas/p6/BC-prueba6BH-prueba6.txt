@@ -1,0 +1,110 @@
+------------------- Ficheros de entrada --------------------
+Fichero BC: 'BC-prueba6.txt'.
+Fichero BH: 'BH-prueba6.txt'.
+------------------------------------------------------------
+------------------- Inferencia en un SBR -------------------
+(Razonamiento dirigido por Metas)
+Objetivo: entrevista
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+  Verificar(entrevista,{casa,matriculado,}) // Recursion 
+  Conjunto Conflicto={R3,R6,} // entrevista es consecuente de estas reglas
+  R={R3} // Seleccionar regla R3
+  Eliminar R3 ---> Conjunto Conflicto={R6,}
+  NuevasMetas={practicaDos,practicaUno,} // Antecedentes de R3; Verificado = true
+  Meta=practicaDos // Seleccionar practicaDos de NuevasMetas
+  NuevasMetas={practicaUno,} // Eliminar practicaDos de NuevasMetas
+    ###########################
+    # Llamada (2) a verificar #
+    ###########################
+    Verificar(practicaDos,{casa,matriculado,}) // Recursion 
+    Conjunto Conflicto={R2,} // practicaDos es consecuente de estas reglas
+    R={R2} // Seleccionar regla R2
+    Eliminar R2 ---> Conjunto Conflicto={}
+    NuevasMetas={matriculado,} // Antecedentes de R2; Verificado = true
+    Meta=matriculado // Seleccionar matriculado de NuevasMetas
+    NuevasMetas={} // Eliminar matriculado de NuevasMetas
+      ###########################
+      # Llamada (3) a verificar #
+      ###########################
+      Verificar(matriculado,{casa,matriculado,}) ---> true // Recursion: matriculado en BH
+      BH={casa,matriculado,}
+      (CASO 3): Combinacion de la evidencia con la regla R2
+         FC(practicaDos{R2})=0.4*max(0,FC(matriculado))=0.4
+      BH={casa,matriculado,practicaDos,} // Insertar practicaDos a la Base de Hechos
+      Meta=practicaUno // Seleccionar practicaUno de NuevasMetas
+      NuevasMetas={} // Eliminar practicaUno de NuevasMetas
+        ###########################
+        # Llamada (4) a verificar #
+        ###########################
+        Verificar(practicaUno,{casa,matriculado,practicaDos,}) // Recursion 
+        Conjunto Conflicto={R1,R5,} // practicaUno es consecuente de estas reglas
+        R={R1} // Seleccionar regla R1
+        Eliminar R1 ---> Conjunto Conflicto={R5,}
+        NuevasMetas={matriculado,} // Antecedentes de R1; Verificado = true
+        Meta=matriculado // Seleccionar matriculado de NuevasMetas
+        NuevasMetas={} // Eliminar matriculado de NuevasMetas
+          ###########################
+          # Llamada (5) a verificar #
+          ###########################
+          Verificar(matriculado,{casa,matriculado,practicaDos,}) ---> true // Recursion: matriculado en BH
+          BH={casa,matriculado,practicaDos,}
+          (CASO 3): Combinacion de la evidencia con la regla R1
+             FC(practicaUno{R1})=0.7*max(0,FC(matriculado))=0.7
+          Conjunto Conflicto={R5,} // practicaUno es consecuente de estas reglas
+          R={R5} // Seleccionar regla R5
+          Eliminar R5 ---> Conjunto Conflicto={}
+          NuevasMetas={clase,} // Antecedentes de R5; Verificado = true
+          Meta=clase // Seleccionar clase de NuevasMetas
+          NuevasMetas={} // Eliminar clase de NuevasMetas
+            ###########################
+            # Llamada (6) a verificar #
+            ###########################
+            Verificar(clase,{casa,matriculado,practicaDos,}) // Recursion 
+            Conjunto Conflicto={R4,} // clase es consecuente de estas reglas
+            R={R4} // Seleccionar regla R4
+            Eliminar R4 ---> Conjunto Conflicto={}
+            NuevasMetas={casa,} // Antecedentes de R4; Verificado = true
+            Meta=casa // Seleccionar casa de NuevasMetas
+            NuevasMetas={} // Eliminar casa de NuevasMetas
+              ###########################
+              # Llamada (7) a verificar #
+              ###########################
+              Verificar(casa,{casa,matriculado,practicaDos,}) ---> true // Recursion: casa en BH
+              BH={casa,matriculado,practicaDos,}
+              (CASO 3): Combinacion de la evidencia con la regla R4
+                 FC(clase{R4})=0.6*max(0,FC(casa))=0.18
+              BH={casa,clase,matriculado,practicaDos,} // Insertar clase a la Base de Hechos
+              (CASO 3): Combinacion de la evidencia con la regla R5
+                 FC(practicaUno{R5})=0.9*max(0,FC(clase))=0.162
+              (CASO 2): Combinacion de las reglas R1 y R5
+                 FC(practicaUno)=FC(practicaUno{R1}) + FC(practicaUno{R5})*(1-FC(practicaUno{R1}))=0.7486
+              BH={casa,clase,matriculado,practicaDos,practicaUno,} // Insertar practicaUno a la Base de Hechos
+              (CASO 1): Combinacion de antecedentes de R3
+                 FC(practicaUno y practicaDos)=min(FC(practicaDos),FC(practicaUno),)=0.4
+              (CASO 3): Combinacion de la evidencia con la regla R3
+                 FC(entrevista{R3})=0.8*max(0,FC(practicaUno y practicaDos))=0.32
+              Conjunto Conflicto={R6,} // entrevista es consecuente de estas reglas
+              R={R6} // Seleccionar regla R6
+              Eliminar R6 ---> Conjunto Conflicto={}
+              NuevasMetas={clase,} // Antecedentes de R6; Verificado = true
+              Meta=clase // Seleccionar clase de NuevasMetas
+              NuevasMetas={} // Eliminar clase de NuevasMetas
+                ###########################
+                # Llamada (8) a verificar #
+                ###########################
+                Verificar(clase,{casa,clase,matriculado,practicaDos,practicaUno,}) ---> true // Recursion: clase en BH
+                BH={casa,clase,matriculado,practicaDos,practicaUno,}
+                (CASO 3): Combinacion de la evidencia con la regla R6
+                   FC(entrevista{R6})=-0.9*max(0,FC(clase))=-0.162
+                (CASO 2): Combinacion de las reglas R3 y R6
+                   FC(entrevista)=FC(entrevista{R3}) + FC(entrevista{R6})/(1-min{|FC(entrevista{R3}|), FC(entrevista{R3}|})=0.188544
+                BH={casa,clase,entrevista,matriculado,practicaDos,practicaUno,} // Insertar entrevista a la Base de Hechos
+Return TRUE
+------------------------------------------------------------
+-------------------- Hecho (entrevista) ---------------------
+Hecho (nomHecho): entrevista
+Hecho (facCerBH): 0.188544
+------------------------------------------------------------
