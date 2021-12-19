@@ -1,0 +1,66 @@
+------------------- Ficheros de entrada --------------------
+Fichero BC: 'ComoAfectaEquipo.txt'.
+Fichero BH: 'Situacion-EST.txt'.
+------------------------------------------------------------
+------------------- Inferencia en un SBR -------------------
+(Razonamiento dirigido por Metas)
+Objetivo: ganaEST
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+  Verificar(ganaEST,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) // Recursion 
+  Conjunto Conflicto={R1,R4,R6,} // ganaEST es consecuente de estas reglas
+  R={R1} // Seleccionar regla R1
+  Eliminar R1 ---> Conjunto Conflicto={R4,R6,}
+  NuevasMetas={arbMod,} // Antecedentes de R1; Verificado = true
+  Meta=arbMod // Seleccionar arbMod de NuevasMetas
+  NuevasMetas={} // Eliminar arbMod de NuevasMetas
+    ###########################
+    # Llamada (2) a verificar #
+    ###########################
+    Verificar(arbMod,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: arbMod en BH
+    BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+    (CASO 1): Combinacion de antecedentes de R1
+       FC(arbMod)=min(FC(arbMod),)=1
+    (CASO 3): Combinacion de la evidencia con la regla R1
+       FC(ganaEST{R1})=0.4*max(0,FC(arbMod))=0.4
+    Conjunto Conflicto={R4,R6,} // ganaEST es consecuente de estas reglas
+    R={R4} // Seleccionar regla R4
+    Eliminar R4 ---> Conjunto Conflicto={R6,}
+    NuevasMetas={publicoEqui,} // Antecedentes de R4; Verificado = true
+    Meta=publicoEqui // Seleccionar publicoEqui de NuevasMetas
+    NuevasMetas={} // Eliminar publicoEqui de NuevasMetas
+      ###########################
+      # Llamada (3) a verificar #
+      ###########################
+      Verificar(publicoEqui,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: publicoEqui en BH
+      BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+      (CASO 1): Combinacion de antecedentes de R4
+         FC(publicoEqui)=min(FC(publicoEqui),)=0.35
+      (CASO 3): Combinacion de la evidencia con la regla R4
+         FC(ganaEST{R4})=-0.55*max(0,FC(publicoEqui))=-0.1925
+      Conjunto Conflicto={R6,} // ganaEST es consecuente de estas reglas
+      R={R6} // Seleccionar regla R6
+      Eliminar R6 ---> Conjunto Conflicto={}
+      NuevasMetas={les2pivEST,} // Antecedentes de R6; Verificado = true
+      Meta=les2pivEST // Seleccionar les2pivEST de NuevasMetas
+      NuevasMetas={} // Eliminar les2pivEST de NuevasMetas
+        ###########################
+        # Llamada (4) a verificar #
+        ###########################
+        Verificar(les2pivEST,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: les2pivEST en BH
+        BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+        (CASO 3): Combinacion de la evidencia con la regla R6
+           FC(ganaEST{R6})=-0.6*max(0,FC(les2pivEST))=-0.6
+        (CASO 2): Combinacion de las reglas R1 y R4
+           FC(ganaEST)=FC(ganaEST{R1}) + FC(ganaEST{R4})/(1-min{|FC(ganaEST{R1}|), FC(ganaEST{R1}|})=0.256966
+        (CASO 2): Combinacion de las reglas R3 y R6
+           FC(ganaEST)=FC(ganaEST{R3}) + FC(ganaEST{R6})/(1-min{|FC(ganaEST{R3}|), FC(ganaEST{R3}|})=-0.461667
+        BH={arbMod,ganaEST,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,} // Insertar ganaEST a la Base de Hechos
+Return TRUE
+------------------------------------------------------------
+-------------------- Hecho (ganaEST) ---------------------
+Hecho (nomHecho): ganaEST
+Hecho (facCerBH): -0.461667
+------------------------------------------------------------

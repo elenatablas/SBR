@@ -1,0 +1,75 @@
+------------------- Ficheros de entrada --------------------
+Fichero BC: 'ComoAfectaEquipo.txt'.
+Fichero BH: 'Situacion-RM.txt'.
+------------------------------------------------------------
+------------------- Inferencia en un SBR -------------------
+(Razonamiento dirigido por Metas)
+Objetivo: ganaRM
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+  Verificar(ganaRM,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) // Recursion 
+  Conjunto Conflicto={R2,R3,R5,} // ganaRM es consecuente de estas reglas
+  R={R2} // Seleccionar regla R2
+  Eliminar R2 ---> Conjunto Conflicto={R3,R5,}
+  NuevasMetas={arbMod,} // Antecedentes de R2; Verificado = true
+  Meta=arbMod // Seleccionar arbMod de NuevasMetas
+  NuevasMetas={} // Eliminar arbMod de NuevasMetas
+    ###########################
+    # Llamada (2) a verificar #
+    ###########################
+    Verificar(arbMod,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: arbMod en BH
+    BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+    (CASO 1): Combinacion de antecedentes de R2
+       FC(arbMod)=min(FC(arbMod),)=1
+    (CASO 3): Combinacion de la evidencia con la regla R2
+       FC(ganaRM{R2})=0.75*max(0,FC(arbMod))=0.75
+    Conjunto Conflicto={R3,R5,} // ganaRM es consecuente de estas reglas
+    R={R3} // Seleccionar regla R3
+    Eliminar R3 ---> Conjunto Conflicto={R5,}
+    NuevasMetas={publicoMayEST,} // Antecedentes de R3; Verificado = true
+    Meta=publicoMayEST // Seleccionar publicoMayEST de NuevasMetas
+    NuevasMetas={} // Eliminar publicoMayEST de NuevasMetas
+      ###########################
+      # Llamada (3) a verificar #
+      ###########################
+      Verificar(publicoMayEST,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: publicoMayEST en BH
+      BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+      (CASO 1): Combinacion de antecedentes de R3
+         FC(publicoMayEST)=min(FC(publicoMayEST),)=0.65
+      (CASO 3): Combinacion de la evidencia con la regla R3
+         FC(ganaRM{R3})=-0.4*max(0,FC(publicoMayEST))=-0.26
+      Conjunto Conflicto={R5,} // ganaRM es consecuente de estas reglas
+      R={R5} // Seleccionar regla R5
+      Eliminar R5 ---> Conjunto Conflicto={}
+      NuevasMetas={les2pivRM,visitanteRM,} // Antecedentes de R5; Verificado = true
+      Meta=les2pivRM // Seleccionar les2pivRM de NuevasMetas
+      NuevasMetas={visitanteRM,} // Eliminar les2pivRM de NuevasMetas
+        ###########################
+        # Llamada (4) a verificar #
+        ###########################
+        Verificar(les2pivRM,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: les2pivRM en BH
+        BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+        Meta=visitanteRM // Seleccionar visitanteRM de NuevasMetas
+        NuevasMetas={} // Eliminar visitanteRM de NuevasMetas
+          ###########################
+          # Llamada (5) a verificar #
+          ###########################
+          Verificar(visitanteRM,{arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}) ---> true // Recursion: visitanteRM en BH
+          BH={arbMod,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,}
+          (CASO 1): Combinacion de antecedentes de R5
+             FC(les2pivRM y visitanteRM)=min(FC(les2pivRM),FC(visitanteRM),)=1
+          (CASO 3): Combinacion de la evidencia con la regla R5
+             FC(ganaRM{R5})=-0.1*max(0,FC(les2pivRM y visitanteRM))=-0.1
+          (CASO 2): Combinacion de las reglas R2 y R3
+             FC(ganaRM)=FC(ganaRM{R2}) + FC(ganaRM{R3})/(1-min{|FC(ganaRM{R2}|), FC(ganaRM{R2}|})=0.662162
+          (CASO 2): Combinacion de las reglas R3 y R5
+             FC(ganaRM)=FC(ganaRM{R3}) + FC(ganaRM{R5})/(1-min{|FC(ganaRM{R3}|), FC(ganaRM{R3}|})=0.624625
+          BH={arbMod,ganaRM,les2pivEST,les2pivRM,localEST,publicoEqui,publicoMayEST,visitanteRM,} // Insertar ganaRM a la Base de Hechos
+Return TRUE
+------------------------------------------------------------
+-------------------- Hecho (ganaRM) ---------------------
+Hecho (nomHecho): ganaRM
+Hecho (facCerBH): 0.624625
+------------------------------------------------------------

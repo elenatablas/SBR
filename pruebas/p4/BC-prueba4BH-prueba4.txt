@@ -1,0 +1,140 @@
+------------------- Ficheros de entrada --------------------
+Fichero BC: 'BC-prueba4.txt'.
+Fichero BH: 'BH-prueba4.txt'.
+------------------------------------------------------------
+------------------- Inferencia en un SBR -------------------
+(Razonamiento dirigido por Metas)
+Objetivo: causante
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+  Verificar(causante,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}) // Recursion 
+  Conjunto Conflicto={R5,R6,R7,} // causante es consecuente de estas reglas
+  R={R5} // Seleccionar regla R5
+  Eliminar R5 ---> Conjunto Conflicto={R6,R7,}
+  NuevasMetas={experimentado,nosolo,} // Antecedentes de R5; Verificado = true
+  Meta=experimentado // Seleccionar experimentado de NuevasMetas
+  NuevasMetas={nosolo,} // Eliminar experimentado de NuevasMetas
+    ###########################
+    # Llamada (2) a verificar #
+    ###########################
+    Verificar(experimentado,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}) // Recursion 
+    Conjunto Conflicto={R1,R2,} // experimentado es consecuente de estas reglas
+    R={R1} // Seleccionar regla R1
+    Eliminar R1 ---> Conjunto Conflicto={R2,}
+    NuevasMetas={antigüedad2-3,} // Antecedentes de R1; Verificado = true
+    Meta=antigüedad2-3 // Seleccionar antigüedad2-3 de NuevasMetas
+    NuevasMetas={} // Eliminar antigüedad2-3 de NuevasMetas
+      ###########################
+      # Llamada (3) a verificar #
+      ###########################
+      Verificar(antigüedad2-3,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}) ---> true // Recursion: antigüedad2-3 en BH
+      BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}
+      (CASO 3): Combinacion de la evidencia con la regla R1
+         FC(experimentado{R1})=0.5*max(0,FC(antigüedad2-3))=0.5
+      Conjunto Conflicto={R2,} // experimentado es consecuente de estas reglas
+      R={R2} // Seleccionar regla R2
+      Eliminar R2 ---> Conjunto Conflicto={}
+      NuevasMetas={antigüedad>3,} // Antecedentes de R2; Verificado = true
+      Meta=antigüedad>3 // Seleccionar antigüedad>3 de NuevasMetas
+      NuevasMetas={} // Eliminar antigüedad>3 de NuevasMetas
+        ###########################
+        # Llamada (4) a verificar #
+        ###########################
+        Verificar(antigüedad>3,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}) ---> true // Recursion: antigüedad>3 en BH
+        BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,joven,nosolo,}
+        (CASO 3): Combinacion de la evidencia con la regla R2
+           FC(experimentado{R2})=0.9*max(0,FC(antigüedad>3))=0
+        (CASO 2): Combinacion de las reglas R1 y R2
+           FC(experimentado)=FC(experimentado{R1}) + FC(experimentado{R2})*(1-FC(experimentado{R1}))=0.5
+        BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,} // Insertar experimentado a la Base de Hechos
+        Meta=nosolo // Seleccionar nosolo de NuevasMetas
+        NuevasMetas={} // Eliminar nosolo de NuevasMetas
+          ###########################
+          # Llamada (5) a verificar #
+          ###########################
+          Verificar(nosolo,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}) ---> true // Recursion: nosolo en BH
+          BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}
+          (CASO 1): Combinacion de antecedentes de R5
+             FC(experimentado y nosolo)=min(FC(experimentado),FC(nosolo),)=0
+          (CASO 3): Combinacion de la evidencia con la regla R5
+             FC(causante{R5})=-0.5*max(0,FC(experimentado y nosolo))=-0
+          Conjunto Conflicto={R6,R7,} // causante es consecuente de estas reglas
+          R={R6} // Seleccionar regla R6
+          Eliminar R6 ---> Conjunto Conflicto={R7,}
+          NuevasMetas={cansado,} // Antecedentes de R6; Verificado = true
+          Meta=cansado // Seleccionar cansado de NuevasMetas
+          NuevasMetas={} // Eliminar cansado de NuevasMetas
+            ###########################
+            # Llamada (6) a verificar #
+            ###########################
+            Verificar(cansado,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}) // Recursion 
+            Conjunto Conflicto={R3,R4,} // cansado es consecuente de estas reglas
+            R={R3} // Seleccionar regla R3
+            Eliminar R3 ---> Conjunto Conflicto={R4,}
+            NuevasMetas={conduce2-3,} // Antecedentes de R3; Verificado = true
+            Meta=conduce2-3 // Seleccionar conduce2-3 de NuevasMetas
+            NuevasMetas={} // Eliminar conduce2-3 de NuevasMetas
+              ###########################
+              # Llamada (7) a verificar #
+              ###########################
+              Verificar(conduce2-3,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}) ---> true // Recursion: conduce2-3 en BH
+              BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}
+              (CASO 1): Combinacion de antecedentes de R3
+                 FC(conduce2-3)=min(FC(conduce2-3),)=0
+              (CASO 3): Combinacion de la evidencia con la regla R3
+                 FC(cansado{R3})=0.5*max(0,FC(conduce2-3))=0
+              Conjunto Conflicto={R4,} // cansado es consecuente de estas reglas
+              R={R4} // Seleccionar regla R4
+              Eliminar R4 ---> Conjunto Conflicto={}
+              NuevasMetas={conduce>3,} // Antecedentes de R4; Verificado = true
+              Meta=conduce>3 // Seleccionar conduce>3 de NuevasMetas
+              NuevasMetas={} // Eliminar conduce>3 de NuevasMetas
+                ###########################
+                # Llamada (8) a verificar #
+                ###########################
+                Verificar(conduce>3,{alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}) ---> true // Recursion: conduce>3 en BH
+                BH={alcohol,antigüedad2-3,antigüedad>3,conduce2-3,conduce>3,experimentado,joven,nosolo,}
+                (CASO 1): Combinacion de antecedentes de R4
+                   FC(conduce>3)=min(FC(conduce>3),)=1
+                (CASO 3): Combinacion de la evidencia con la regla R4
+                   FC(cansado{R4})=1*max(0,FC(conduce>3))=1
+                (CASO 2): Combinacion de las reglas R3 y R4
+                   FC(cansado)=FC(cansado{R3}) + FC(cansado{R4})*(1-FC(cansado{R3}))=1
+                BH={alcohol,antigüedad2-3,antigüedad>3,cansado,conduce2-3,conduce>3,experimentado,joven,nosolo,} // Insertar cansado a la Base de Hechos
+                (CASO 3): Combinacion de la evidencia con la regla R6
+                   FC(causante{R6})=0.5*max(0,FC(cansado))=0.5
+                Conjunto Conflicto={R7,} // causante es consecuente de estas reglas
+                R={R7} // Seleccionar regla R7
+                Eliminar R7 ---> Conjunto Conflicto={}
+                NuevasMetas={alcohol,joven,} // Antecedentes de R7; Verificado = true
+                Meta=alcohol // Seleccionar alcohol de NuevasMetas
+                NuevasMetas={joven,} // Eliminar alcohol de NuevasMetas
+                  ###########################
+                  # Llamada (9) a verificar #
+                  ###########################
+                  Verificar(alcohol,{alcohol,antigüedad2-3,antigüedad>3,cansado,conduce2-3,conduce>3,experimentado,joven,nosolo,}) ---> true // Recursion: alcohol en BH
+                  BH={alcohol,antigüedad2-3,antigüedad>3,cansado,conduce2-3,conduce>3,experimentado,joven,nosolo,}
+                  Meta=joven // Seleccionar joven de NuevasMetas
+                  NuevasMetas={} // Eliminar joven de NuevasMetas
+                    ###########################
+                    # Llamada (10) a verificar #
+                    ###########################
+                    Verificar(joven,{alcohol,antigüedad2-3,antigüedad>3,cansado,conduce2-3,conduce>3,experimentado,joven,nosolo,}) ---> true // Recursion: joven en BH
+                    BH={alcohol,antigüedad2-3,antigüedad>3,cansado,conduce2-3,conduce>3,experimentado,joven,nosolo,}
+                    (CASO 1): Combinacion de antecedentes de R7
+                       FC(joven y alcohol)=min(FC(alcohol),FC(joven),)=0.4
+                    (CASO 3): Combinacion de la evidencia con la regla R7
+                       FC(causante{R7})=0.7*max(0,FC(joven y alcohol))=0.28
+                    (CASO 2): Combinacion de las reglas R5 y R6
+                       FC(causante)=FC(causante{R5}) + FC(causante{R6})*(1-FC(causante{R5}))=0.5
+                    (CASO 2): Combinacion de las reglas R3 y R7
+                       FC(causante)=FC(causante{R3}) + FC(causante{R7})*(1-FC(causante{R3}))=0.64
+                    BH={alcohol,antigüedad2-3,antigüedad>3,cansado,causante,conduce2-3,conduce>3,experimentado,joven,nosolo,} // Insertar causante a la Base de Hechos
+Return TRUE
+------------------------------------------------------------
+-------------------- Hecho (causante) ---------------------
+Hecho (nomHecho): causante
+Hecho (facCerBH): 0.64
+------------------------------------------------------------

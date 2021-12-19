@@ -5,4 +5,4 @@ R3: Si conduce2-3 Entonces cansado, FC=0.5
 R4: Si conduce>3 Entonces cansado, FC=1
 R5: Si experimentado y nosolo Entonces causante, FC=-0.5
 R6: Si cansado Entonces causante, FC=0.5
-R7: Si joven y alchool Entonces causante, FC=0.7
+R7: Si joven y alcohol Entonces causante, FC=0.7

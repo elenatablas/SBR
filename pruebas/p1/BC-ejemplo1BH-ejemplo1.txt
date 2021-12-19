@@ -1,0 +1,136 @@
+------------------- Ficheros de entrada --------------------
+Fichero BC: 'BC-ejemplo1.txt'.
+Fichero BH: 'BH-ejemplo1.txt'.
+------------------------------------------------------------
+------------------- Inferencia en un SBR -------------------
+(Razonamiento dirigido por Metas)
+Objetivo: CACC
+Proceso de Inferencia: 
+  ###########################
+  # Llamada (1) a verificar #
+  ###########################
+  Verificar(CACC,{A,B,C,D,E,F,G,}) // Recursion 
+  Conjunto Conflicto={R5,R6,R7,} // CACC es consecuente de estas reglas
+  R={R5} // Seleccionar regla R5
+  Eliminar R5 ---> Conjunto Conflicto={R6,R7,}
+  NuevasMetas={E,EXP,} // Antecedentes de R5; Verificado = true
+  Meta=E // Seleccionar E de NuevasMetas
+  NuevasMetas={EXP,} // Eliminar E de NuevasMetas
+    ###########################
+    # Llamada (2) a verificar #
+    ###########################
+    Verificar(E,{A,B,C,D,E,F,G,}) ---> true // Recursion: E en BH
+    BH={A,B,C,D,E,F,G,}
+    Meta=EXP // Seleccionar EXP de NuevasMetas
+    NuevasMetas={} // Eliminar EXP de NuevasMetas
+      ###########################
+      # Llamada (3) a verificar #
+      ###########################
+      Verificar(EXP,{A,B,C,D,E,F,G,}) // Recursion 
+      Conjunto Conflicto={R1,R2,} // EXP es consecuente de estas reglas
+      R={R1} // Seleccionar regla R1
+      Eliminar R1 ---> Conjunto Conflicto={R2,}
+      NuevasMetas={A,} // Antecedentes de R1; Verificado = true
+      Meta=A // Seleccionar A de NuevasMetas
+      NuevasMetas={} // Eliminar A de NuevasMetas
+        ###########################
+        # Llamada (4) a verificar #
+        ###########################
+        Verificar(A,{A,B,C,D,E,F,G,}) ---> true // Recursion: A en BH
+        BH={A,B,C,D,E,F,G,}
+        (CASO 3): Combinacion de la evidencia con la regla R1
+           FC(EXP{R1})=0.5*max(0,FC(A))=0.5
+        Conjunto Conflicto={R2,} // EXP es consecuente de estas reglas
+        R={R2} // Seleccionar regla R2
+        Eliminar R2 ---> Conjunto Conflicto={}
+        NuevasMetas={B,} // Antecedentes de R2; Verificado = true
+        Meta=B // Seleccionar B de NuevasMetas
+        NuevasMetas={} // Eliminar B de NuevasMetas
+          ###########################
+          # Llamada (5) a verificar #
+          ###########################
+          Verificar(B,{A,B,C,D,E,F,G,}) ---> true // Recursion: B en BH
+          BH={A,B,C,D,E,F,G,}
+          (CASO 3): Combinacion de la evidencia con la regla R2
+             FC(EXP{R2})=0.9*max(0,FC(B))=0
+          (CASO 2): Combinacion de las reglas R1 y R2
+             FC(EXP)=FC(EXP{R1}) + FC(EXP{R2})*(1-FC(EXP{R1}))=0.5
+          BH={A,B,C,D,E,EXP,F,G,} // Insertar EXP a la Base de Hechos
+          (CASO 1): Combinacion de antecedentes de R5
+             FC(EXP y E)=min(FC(E),FC(EXP),)=-1
+          (CASO 3): Combinacion de la evidencia con la regla R5
+             FC(CACC{R5})=-0.5*max(0,FC(EXP y E))=-0
+          Conjunto Conflicto={R6,R7,} // CACC es consecuente de estas reglas
+          R={R6} // Seleccionar regla R6
+          Eliminar R6 ---> Conjunto Conflicto={R7,}
+          NuevasMetas={CAN,} // Antecedentes de R6; Verificado = true
+          Meta=CAN // Seleccionar CAN de NuevasMetas
+          NuevasMetas={} // Eliminar CAN de NuevasMetas
+            ###########################
+            # Llamada (6) a verificar #
+            ###########################
+            Verificar(CAN,{A,B,C,D,E,EXP,F,G,}) // Recursion 
+            Conjunto Conflicto={R3,R4,} // CAN es consecuente de estas reglas
+            R={R3} // Seleccionar regla R3
+            Eliminar R3 ---> Conjunto Conflicto={R4,}
+            NuevasMetas={C,} // Antecedentes de R3; Verificado = true
+            Meta=C // Seleccionar C de NuevasMetas
+            NuevasMetas={} // Eliminar C de NuevasMetas
+              ###########################
+              # Llamada (7) a verificar #
+              ###########################
+              Verificar(C,{A,B,C,D,E,EXP,F,G,}) ---> true // Recursion: C en BH
+              BH={A,B,C,D,E,EXP,F,G,}
+              (CASO 3): Combinacion de la evidencia con la regla R3
+                 FC(CAN{R3})=0.5*max(0,FC(C))=0
+              Conjunto Conflicto={R4,} // CAN es consecuente de estas reglas
+              R={R4} // Seleccionar regla R4
+              Eliminar R4 ---> Conjunto Conflicto={}
+              NuevasMetas={D,} // Antecedentes de R4; Verificado = true
+              Meta=D // Seleccionar D de NuevasMetas
+              NuevasMetas={} // Eliminar D de NuevasMetas
+                ###########################
+                # Llamada (8) a verificar #
+                ###########################
+                Verificar(D,{A,B,C,D,E,EXP,F,G,}) ---> true // Recursion: D en BH
+                BH={A,B,C,D,E,EXP,F,G,}
+                (CASO 3): Combinacion de la evidencia con la regla R4
+                   FC(CAN{R4})=1*max(0,FC(D))=1
+                (CASO 2): Combinacion de las reglas R3 y R4
+                   FC(CAN)=FC(CAN{R3}) + FC(CAN{R4})*(1-FC(CAN{R3}))=1
+                BH={A,B,C,CAN,D,E,EXP,F,G,} // Insertar CAN a la Base de Hechos
+                (CASO 3): Combinacion de la evidencia con la regla R6
+                   FC(CACC{R6})=0.5*max(0,FC(CAN))=0.5
+                Conjunto Conflicto={R7,} // CACC es consecuente de estas reglas
+                R={R7} // Seleccionar regla R7
+                Eliminar R7 ---> Conjunto Conflicto={}
+                NuevasMetas={F,G,} // Antecedentes de R7; Verificado = true
+                Meta=F // Seleccionar F de NuevasMetas
+                NuevasMetas={G,} // Eliminar F de NuevasMetas
+                  ###########################
+                  # Llamada (9) a verificar #
+                  ###########################
+                  Verificar(F,{A,B,C,CAN,D,E,EXP,F,G,}) ---> true // Recursion: F en BH
+                  BH={A,B,C,CAN,D,E,EXP,F,G,}
+                  Meta=G // Seleccionar G de NuevasMetas
+                  NuevasMetas={} // Eliminar G de NuevasMetas
+                    ###########################
+                    # Llamada (10) a verificar #
+                    ###########################
+                    Verificar(G,{A,B,C,CAN,D,E,EXP,F,G,}) ---> true // Recursion: G en BH
+                    BH={A,B,C,CAN,D,E,EXP,F,G,}
+                    (CASO 1): Combinacion de antecedentes de R7
+                       FC(F y G)=min(FC(F),FC(G),)=0.4
+                    (CASO 3): Combinacion de la evidencia con la regla R7
+                       FC(CACC{R7})=0.7*max(0,FC(F y G))=0.28
+                    (CASO 2): Combinacion de las reglas R5 y R6
+                       FC(CACC)=FC(CACC{R5}) + FC(CACC{R6})*(1-FC(CACC{R5}))=0.5
+                    (CASO 2): Combinacion de las reglas R3 y R7
+                       FC(CACC)=FC(CACC{R3}) + FC(CACC{R7})*(1-FC(CACC{R3}))=0.64
+                    BH={A,B,C,CACC,CAN,D,E,EXP,F,G,} // Insertar CACC a la Base de Hechos
+Return TRUE
+------------------------------------------------------------
+-------------------- Hecho (CACC) ---------------------
+Hecho (nomHecho): CACC
+Hecho (facCerBH): 0.64
+------------------------------------------------------------
