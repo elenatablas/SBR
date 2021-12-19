@@ -14,7 +14,9 @@
 \begin{listing}[language=Pascal]
 function ENCAMINAMIENTO-HACIA-ATRAS
   BH=HechosIniciales;
-  si Verificar(Meta,BH) entonces devolver "exito";
+  si Verificar(Meta,BH) entonces 
+	Imprimir(Meta, FactorCerteza);
+ 	devolver "exito";
   si no
     devolver "fracaso";
   fin si
@@ -25,27 +27,40 @@ function VERIFICAR
   si Contenida(Meta,BH) entonces devolver "Verdadero";
   si no
     ConjuntoConflicto=Equiparar(Consecuentes(BC),Meta);
-    mientras NoVacio(ConjuntoConflicto) y No(verificado) hacer
+    mientras NoVacio(ConjuntoConflicto) hacer
       R=Resolver(ConjuntoConflicto);
-	  Eliminar(R,ConjuntoCOnflicto);
+	  Eliminar(R,ConjuntoConflicto);
 	  NuevasMetas=ExtraerAntecedentes(R);
 	  Verificado=Verdadero;
-	  mientras noVacio(NuevasMetas) y Verificado hacer
+	  mientras NoVacio(NuevasMetas) y Verificado hacer
 	  	Nmet=SeleccionarMeta(NuevasMetas);
 		Eliminar(NMet, NuevasMetas);
 		Verificado=Verificar(NMet,BH);
 	  fin mientras
-	  si Verificado entonces A\~nadir(Meta,BH);
+	  si noEsTipoLiteral(R) entonces Caso1(R,BH);
 	  fin si
+	  Caso3(R,BH);
+	  Insertar(ConjuntoResuelto,R); 
 	fin mientras
-	devolver(Verificado);
+	// Caso2(Meta,ConjuntoResuelto);
+	InsertarObjetivo(Meta,BH,ConjuntoResuelto); 
   fin si
-
-
-
+  devolver(Verificado);
 \end{listing}
 
-\newpage
+\par El pseudocódigo es parecido al proporcionado por la asignatura. \\
+Elimino ``\texttt{No(Verificado)}'' del bucle exterior porque quiero recorrer todas
+las reglas posibles para generar el factor de certeza de mi objetivo. Además,
+añado el ``\texttt{ConjuntoResuelto}'' para poder calcular los factores de certeza 
+cuando se convinan varias reglas que es el caso de la adquisición incremental de evidencia.
+\par Los factores de certeza se calculan en distintos instantes. 
+Cuando ya he recorriendo las NuevasMetas que son los antecedentes de la regla que he seleccionado 
+y he verificado todos los antecedentes que la componen, observo si solo tiene un antecedente o
+de varios. En el segundo caso, combinaré sus factores de certeza para obtener el de la conjunción o disyunción. 
+A continuación, para todos los casos, combinaré la evidencia con la regla.
+Por último, cuando ya he calculado todos los factores de certeza de las evidencias con las reglas que tienen como consecuente la meta
+que se está buscando, combino todas esas reglas para formar un único factor de certeza de la meta.
+
 
 
 
